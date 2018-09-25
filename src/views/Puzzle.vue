@@ -1,9 +1,13 @@
 <template>
     <section class="main">
         <img src="../assets/new.jpg" alt="" id="img">
+        <img src="../assets/compare.jpg" alt="" id="img2">
         <div id="content" class="clearfix" @dragstart="handleDrag" @dragover="handleDragover" @drop="handleDrop"></div>
         <div id="target" @dragover="handleDragover" @dragstart="handleDrag" @drop="handleDrop">
             <!--<canvas id="targetCanvas" width="460" height="640" style="background-color: #000;"></canvas>-->
+        </div>
+        <div id="compare">
+            <canvas id="compareCanvas"></canvas>
         </div>
     </section>
 </template>
@@ -21,6 +25,10 @@
       img.onload = () => {
         this.splitImg(img);
       };
+      const img2 = document.getElementById('img2');
+      img2.onload = () => {
+        this.drawCompare(img2);
+      };
 
       // const canvas = document.getElementById('targetCanvas');
       // const context = canvas.getContext('2d');
@@ -28,6 +36,27 @@
       this.setTargetCanvas();
     },
     methods: {
+      drawCompare(img) {
+        const width = 143;
+        const height = 200;
+        const canvas = document.getElementById('compareCanvas');
+        let ctx = canvas.getContext('2d');
+        canvas.width = 460;
+        canvas.height = 640;
+        ctx.drawImage(img, 0, 0, 596, 848, 0, 0, 460, 640);
+        ctx.strokeStyle = '#0f0';
+        ctx.lineWidth = 2;
+        for (let i = 1; i < 8; i++) {
+//          for (let j = 1; j < 8; j++) {
+            ctx.moveTo(i*57.2, 0);
+            ctx.lineTo(i*57.2, 640);
+            ctx.stroke();
+            ctx.moveTo(0, i*80);
+            ctx.lineTo(460, i*80);
+            ctx.stroke();
+//          }
+        }
+      },
       splitImg(img) {
         const width = 143;
         const height = 200;
@@ -43,6 +72,7 @@
             canvas.style.position = 'absolute';
             canvas.style.top = `${i * innerHeight}px`;
             canvas.style.left = `${j * innerWidth}px`;
+            canvas.style.backgroundColor = '#f00';
             canvas.setAttribute('draggable', true);
             canvas.setAttribute('data-y', y);
             canvas.setAttribute('data-x', x);
@@ -134,7 +164,7 @@
 </script>
 
 <style scoped lang="scss">
-    #img {
+    #img, #img2 {
         display: none;
     }
     #content {
@@ -147,7 +177,15 @@
         position: relative;
         width: 460px;
         height: 640px;
+        margin-left: 20px;
         border: 1px solid red;
+    }
+    #compare {
+        display: inline-block;
+        width: 460px;
+        height: 640px;
+        margin-left: 20px;
+        border:1px solid yellow;
     }
     .main {
         display: flex;

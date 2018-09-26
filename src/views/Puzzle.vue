@@ -1,15 +1,18 @@
 <template>
-    <section class="main">
-        <img src="../assets/new.jpg" alt="" id="img">
-        <img src="../assets/compare.jpg" alt="" id="img2">
-        <div id="content" class="clearfix" @dragstart="handleDrag" @dragover="handleDragover" @drop="handleDrop"></div>
-        <div id="target" @dragover="handleDragover" @dragstart="handleDrag" @drop="handleDrop">
-            <!--<canvas id="targetCanvas" width="460" height="640" style="background-color: #000;"></canvas>-->
-        </div>
-        <div id="compare">
-            <canvas id="compareCanvas"></canvas>
-        </div>
-    </section>
+  <section class="main">
+    <img src="../assets/new.jpg" alt="" id="img">
+    <img src="../assets/compare.jpg" alt="" id="img2">
+    <div id="content" class="clearfix" @dragstart="handleDrag" @dragover="handleDragover" @drop="handleDrop"></div>
+    <div id="target" @dragover="handleDragover" @dragstart="handleDrag" @drop="handleDrop">
+      <!--<canvas id="targetCanvas" width="460" height="640" style="background-color: #000;"></canvas>-->
+    </div>
+    <div id="compare">
+      <canvas id="compareCanvas"></canvas>
+    </div>
+    <canvas id="test" width="1144" height="1600"></canvas>
+
+    <p>{{jsonStr}}</p>
+  </section>
 </template>
 
 <script>
@@ -18,12 +21,63 @@
     data() {
       return {
         tempSrcCanvas: null, // 保存拖动时的源canvas
+        jsonStr: [],
+        testJson: [{"src": "5", "target": "57"}, {"src": "8", "target": "49"}, {
+          "src": "32",
+          "target": "25"
+        }, {"src": "28", "target": "56"}, {"src": "27", "target": "59"}, {"src": "30", "target": "14"}, {
+          "src": "12",
+          "target": "22"
+        }, {"src": "43", "target": "48"}, {"src": "47", "target": "38"}, {"src": "48", "target": "30"}, {
+          "src": "53",
+          "target": "40"
+        }, {"src": "38", "target": "41"}, {"src": "56", "target": "46"}, {"src": "44", "target": "45"}, {
+          "src": "31",
+          "target": "44"
+        }, {"src": "63", "target": "21"}, {"src": "21", "target": "33"}, {"src": "11", "target": "34"}, {
+          "src": "23",
+          "target": "35"
+        }, {"src": "2", "target": "36"}, {"src": "25", "target": "43"}, {"src": "61", "target": "53"}, {
+          "src": "52",
+          "target": "17"
+        }, {"src": "50", "target": "13"}, {"src": "36", "target": "27"}, {"src": "35", "target": "18"}, {
+          "src": "51",
+          "target": "19"
+        }, {"src": "10", "target": "28"}, {"src": "18", "target": "20"}, {"src": "62", "target": "58"}, {
+          "src": "41",
+          "target": "52"
+        }, {"src": "17", "target": "51"}, {"src": "39", "target": "50"}, {"src": "46", "target": "60"}, {
+          "src": "14",
+          "target": "26"
+        }, {"src": "15", "target": "54"}, {"src": "60", "target": "61"}, {"src": "59", "target": "42"}, {
+          "src": "22",
+          "target": "16"
+        }, {"src": "26", "target": "31"}, {"src": "7", "target": "63"}, {"src": "6", "target": "62"}, {
+          "src": "16",
+          "target": "37"
+        }, {"src": "4", "target": "55"}, {"src": "33", "target": "29"}, {"src": "40", "target": "15"}, {
+          "src": "3",
+          "target": "23"
+        }, {"src": "49", "target": "39"}, {"src": "1", "target": "47"}, {"src": "42", "target": "12"}, {
+          "src": "54",
+          "target": "11"
+        }, {"src": "19", "target": "10"}, {"src": "57", "target": "4"}, {"src": "13", "target": "2"}, {
+          "src": "55",
+          "target": "7"
+        }, {"src": "34", "target": "6"}, {"src": "37", "target": "9"}, {"src": "20", "target": "8"}, {
+          "src": "9",
+          "target": "24"
+        }, {"src": "58", "target": "32"}, {"src": "24", "target": "0"}, {"src": "29", "target": "1"}, {
+          "src": "45",
+          "target": "3"
+        }, {"src": "0", "target": "5"}]
       };
     },
     mounted() {
       const img = document.getElementById('img');
       img.onload = () => {
         this.splitImg(img);
+        this.drawTest(img);
       };
       const img2 = document.getElementById('img2');
       img2.onload = () => {
@@ -36,6 +90,35 @@
       this.setTargetCanvas();
     },
     methods: {
+      drawTest(img) {
+        const imgs = this.testJson;
+        const array = [];
+        const width = 143;
+        const height = 200;
+        const testCanvas = document.getElementById('test');
+        const context = testCanvas.getContext('2d');
+        imgs.map((ele, index) => {
+//          const canvas = document.createElement('canvas');
+//          const ctx = canvas.getContext('2d');
+//          canvas.width = 143;
+//          canvas.height = 200;
+//          ctx.draw
+//          if (index !== 0) {
+//            return
+//          }
+          const src = +ele.src;
+          const srcX = Math.floor(src / 8) * width;
+          const srcY = Math.floor(src % 8) * height;
+          const target = +ele.target;
+          const targetX = Math.floor(target / 8) * width;
+          const targetY = Math.floor(target % 8) * height;
+          console.log(srcX,srcY)
+          console.log(targetX,targetY)
+          setTimeout(() => {
+            context.drawImage(img, srcX, srcY, width, height, targetX, targetY, width, height);
+          }, 1000)
+        });
+      },
       drawCompare(img) {
         const width = 143;
         const height = 200;
@@ -48,12 +131,12 @@
         ctx.lineWidth = 2;
         for (let i = 1; i < 8; i++) {
 //          for (let j = 1; j < 8; j++) {
-            ctx.moveTo(i*57.2, 0);
-            ctx.lineTo(i*57.2, 640);
-            ctx.stroke();
-            ctx.moveTo(0, i*80);
-            ctx.lineTo(460, i*80);
-            ctx.stroke();
+          ctx.moveTo(i * 57.2, 0);
+          ctx.lineTo(i * 57.2, 640);
+          ctx.stroke();
+          ctx.moveTo(0, i * 80);
+          ctx.lineTo(460, i * 80);
+          ctx.stroke();
 //          }
         }
       },
@@ -76,6 +159,7 @@
             canvas.setAttribute('draggable', true);
             canvas.setAttribute('data-y', y);
             canvas.setAttribute('data-x', x);
+            canvas.setAttribute('data-index', i * 8 + j);
 
             ctx.scale(0.4, 0.4);
             ctx.drawImage(img, x, y, width, height, 0, 0, width, height);
@@ -85,10 +169,11 @@
         }
       },
       handleDrag(ev) {
-        console.log(ev);
+//        console.log(ev);
         // ev.dataTransfer.setData('img', ev.target);
         ev.dataTransfer.setData('x', ev.target.dataset.x);
         ev.dataTransfer.setData('y', ev.target.dataset.y);
+        ev.dataTransfer.setData('index', ev.target.dataset.index);
         const _src = ev.target;
         const _ctx = _src.getContext('2d');
         this.tempSrcCanvas = _ctx;
@@ -99,10 +184,11 @@
       },
       handleDrop(ev) {
         const img = document.getElementById('img');
-        console.log(ev);
+//        console.log(ev);
         // const src = ev.dataTransfer.getData('img');
         const x = ev.dataTransfer.getData('x');
         const y = ev.dataTransfer.getData('y');
+        const index = ev.dataTransfer.getData('index');
         // console.log(src);
         const _target = ev.target;
         let ctx = _target.getContext('2d');
@@ -111,7 +197,12 @@
         ctx = null;
 
         this.tempSrcCanvas.clearRect(0, 0, 143, 200);
-
+        console.log('src', index);
+        console.log('target', _target.dataset.target_index);
+        this.jsonStr.push({
+          src: index,
+          target: _target.dataset.target_index
+        })
       },
       // 设置坐标点
       setCoords(ctx) {
@@ -147,7 +238,7 @@
             canvas.style.top = `${y}px`;
             canvas.style.left = `${x}px`;
             canvas.setAttribute('draggable', true);
-            canvas.setAttribute('data-index', `${i}${j}`);
+            canvas.setAttribute('data-target_index', i * 8 + j);
 
             ctx.beginPath();
             ctx.strokeStyle = '#fff';
@@ -164,40 +255,49 @@
 </script>
 
 <style scoped lang="scss">
-    #img, #img2 {
-        display: none;
-    }
-    #content {
-        position: relative;
-        width: 460px;
-        height: 460px;
-        border: 1px solid blue;
-    }
-    #target {
-        position: relative;
-        width: 460px;
-        height: 640px;
-        margin-left: 20px;
-        border: 1px solid red;
-    }
-    #compare {
-        display: inline-block;
-        width: 460px;
-        height: 640px;
-        margin-left: 20px;
-        border:1px solid yellow;
-    }
-    .main {
-        display: flex;
-    }
-    canvas {
-        position: absolute;
-    }
-    .clearfix::after {
-        content: '.';
-        display: block;
-        height: 0;
-        clear: both;
-        visibility: hidden;
-    }
+  #img, #img2 {
+    display: none;
+  }
+
+  #content {
+    position: relative;
+    width: 460px;
+    height: 460px;
+    border: 1px solid blue;
+    display: none;
+  }
+
+  #target {
+    position: relative;
+    width: 460px;
+    height: 640px;
+    margin-left: 20px;
+    border: 1px solid red;
+    display: none;
+  }
+
+  #compare {
+    display: inline-block;
+    width: 460px;
+    height: 640px;
+    margin-left: 20px;
+    border: 1px solid yellow;
+    display: none;
+  }
+
+  .main {
+    display: flex;
+  }
+
+  canvas {
+    position: absolute;
+  }
+
+  .clearfix::after {
+    content: '.';
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+  }
 </style>

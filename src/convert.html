@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #canvas {
+            border: 1px solid red;
+        }
+    </style>
+</head>
+<body>
+<img src="./assets/convert.jpg">
+<canvas id="canvas"></canvas>
+<script src="convert.js"></script>
+<script>
+    var canvas = document.querySelector('#canvas');
+    var img = document.querySelector('img');
+    canvas.width = 960;
+    canvas.height = 1280;
+    var convert = new Converter();
+    var params = {
+      width: 960,
+      height: 1280,
+      converterParams: {
+        subdivisions: 64,
+        padding: 0,
+        scramble: ''
+      },
+      src_img: img,
+      dst_canvas: canvas
+    };
+    convert.decodeDraw(params)
+</script>
+</body>
+</html>

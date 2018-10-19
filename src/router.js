@@ -5,7 +5,9 @@ import About from "./views/About.vue";
 import Drag from "./views/Drag.vue";
 import Video from "./views/Video.vue";
 import Canvas from "./views/Canvas.vue";
-import Puzzle from "./views/Puzzle.vue";
+// import Puzzle from "./views/Puzzle.vue";
+
+const Puzzle = () => import('./views/Puzzle.vue');
 
 Vue.use(Router);
 
